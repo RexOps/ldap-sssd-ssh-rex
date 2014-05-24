@@ -10,6 +10,7 @@ user "root";
 password "box";
 
 group server => "10.211.55.168";
+group client => "10.211.55.168", "10.211.55.169";
 
 set openldap => {
   bind_dn  => 'cn=admin,dc=rexify,dc=org',
@@ -18,7 +19,7 @@ set openldap => {
 };
 
 task "setup_client",
-  group => "server",
+  group => "client",
   make {
 
   Rex::LDAP::OpenLDAP::UserManagement::Client::setup {
@@ -103,5 +104,17 @@ task "setup_server",
     'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChUwh/HH1NGFB7M3m9DyL/hH3HoJpRu9mi52JIUI2PhZhBU/idp3qcvhur2U9IpwQfjjzgei7IN3dgTjnIB1CFG9ux4PJ56gS2NYvcHd+FsuSJecGLEkYamq2dk2+CgRC7rPGLhxCrBO29FI9O5Lfew8hiFOVIIIY2S9xXgWXQeH/bxqrsJW/WoGusZjZaWCJkYZmC7y3CvxswBkDOAXdf8tl1rbRQbTjRSiEoCQjsCFYV3unNDS7gwSf2a9nBZmBkWibr69HbofE/LScKauhasXz55bqCRdn+ELJiHTJfi4tExRwhHxl6mtD1VjfxBfts5gJgdRclOpni1nuwPPIp jan@pitahaya.local',
     groups => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
 
+  ldap_account "jgehring",
+    ensure        => 'absent',
+    dn            => 'ou=People,dc=rexify,dc=org',
+    givenName     => 'Jan',
+    sn            => 'Gehring',
+    uidNumber     => 5001,
+    gidNumber     => 3000,
+    homeDirectory => '/home/jgehring',
+    loginShell    => '/bin/bash',
+    mail          => 'jan.gehring@inovex.de',
+    userPassword  => '{CRYPT}vPYgtKD.j9iL2',
+    groups        => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
 
   };
