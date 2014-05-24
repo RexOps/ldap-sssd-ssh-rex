@@ -1,0 +1,1 @@
+V	150524121618Z		1000	unknown	/C=DE/ST=Baden/O=Rexify/OU=admin/CN=openldap-01.rexify.org
