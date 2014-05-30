@@ -120,7 +120,9 @@ This task is configured to run on all servers registered in the group *server*.
 First it install OpenLDAP and create a root database for you. It also configures the admin password of your LDAP server.
 
 *ldap_root_dn* is the name of the database Rex should create for you. Normaly you want to add your organizations domain. Something like *dc=company,dc=tld*.
+
 *ldap_root_db_admin_password* is the password for the admin account of your database. This will be *cn=admin,dc=rexify,dc=org*.
+
 *ldap_configure_tls* can be set to *TRUE* or *FALSE*. If you set it to true, you have to add the SSL cert-, key- and ca file into the folder *files/openldap/certs*, so that Rex can upload them to the LDAP server.
 
 The second function call ```add_ssh_public_key``` will add the SSH-key schema to the OpenLDAP server, so that it is possible to add the public ssh keys into OpenLDAP.
