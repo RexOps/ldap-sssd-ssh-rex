@@ -33,10 +33,23 @@ rexify --init=https://bitbucket.org/jfried/ldap-sssd-ssh-rex.git
 
 This command will download the code and all dependencies into the folder *ldap-sssd-ssh-rex*.
 
+## Setup OpenLDAP
+
+To setup OpenLDAP it is important to follow one rule. Never ever try to manage the configuration files inside /etc/openldap/slapd.d with an editor or by writing to the files directly. Sooner or later this will get you into trouble. So always use ldapmodify/ldapadd command to change things inside this directory.
+
+With Rex you can use *ldap_entry* resource to manage these entries.
+
+The default installation of OpenLDAP is not able to manage SSH Keys inside it. But there is a schema we will add to it later so that this is possible, too.
+
+If you consider to put your OpenLDAP installation to production i recommend you to read http://www.openldap.org/doc/admin24/replication.html how to setup replication.
+
+
+
+## Setup SSSD
+
+
 ## Exploring the code
 
 The Rexfile
 
 The other files
-
-The CMDB
