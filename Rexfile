@@ -46,16 +46,16 @@ task "setup_server",
     objectClass => [ 'top', 'organizationalUnit' ],
     ou          => 'Services';
 
-  ldap_entry "ou=HostGroup,dc=rexify,dc=org",
-    ensure      => 'present',
-    objectClass => [ 'top', 'organizationalUnit' ],
-    ou          => 'HostGroup';
+  # ldap_entry "ou=HostGroup,dc=rexify,dc=org",
+  #   ensure      => 'present',
+  #   objectClass => [ 'top', 'organizationalUnit' ],
+  #   ou          => 'HostGroup';
 
-  ldap_entry "cn=admin,ou=HostGroup,dc=rexify,dc=org",
-    ensure      => 'present',
-    cn          => 'admin',
-    objectClass => [ 'top', 'groupOfNames' ],
-    member      => ['cn=jfried,ou=People,dc=rexify,dc=org'];
+  # ldap_entry "cn=admin,ou=HostGroup,dc=rexify,dc=org",
+  #   ensure      => 'present',
+  #   cn          => 'admin',
+  #   objectClass => [ 'top', 'groupOfNames' ],
+  #   member      => ['cn=jfried,ou=People,dc=rexify,dc=org'];
 
   ldap_group "ldapusers",
     ensure    => 'present',

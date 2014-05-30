@@ -127,6 +127,33 @@ First it install OpenLDAP and create a root database for you. It also configures
 
 The second function call ```add_ssh_public_key``` will add the SSH-key schema to the OpenLDAP server, so that it is possible to add the public ssh keys into OpenLDAP.
 
+#### Populating OpenLDAP
+
+Now you have a working OpenLDAP you need to populate it with some data.
+
+First we need to create a default folder structure inside it, so you can manage your groups and users. For this you can use the ```ldap_entry``` resource. This resource ensures that the entry exists and has the options set that are defined.
+
+```perl
+ldap_entry "ou=People,dc=rexify,dc=org",
+  ensure      => 'present',
+  objectClass => [ 'top', 'organizationalUnit' ],
+  ou          => 'People';
+
+ldap_entry "ou=Groups,dc=rexify,dc=org",
+  ensure      => 'present',
+  objectClass => [ 'top', 'organizationalUnit' ],
+  ou          => 'Groups';
+
+ldap_entry "ou=Services,dc=rexify,dc=org",
+  ensure      => 'present',
+  objectClass => [ 'top', 'organizationalUnit' ],
+  ou          => 'Services';
+```
+
+This code creates 3 *folders* (the LDAP name for such a *folder* is *organizationalUnit*, hence the acronym *ou*). One for the user accounts *ou=People,dc=rexify,dc=org*, one for the groups *ou=Groups,dc=rexify,dc=org* and one for special service accounts *ou=Services,dc=rexify,dc=org*.
+
+You can create you own structure this is just an example.
+
 ## Setup SSSD
 
 
