@@ -28,12 +28,12 @@ sudo sh -c "curl -L cpanmin.us | perl - Rex"
 To initialize your project you can use the ```rexify``` command to download the code and all dependencies.
 
 ```bash
-rexify --init=https://jfried@bitbucket.org/jfried/ldap-sssd-ssh-rex.git
+rexify --init=https://bitbucket.org/jfried/ldap-sssd-ssh-rex.git
 ```
 
 This command will download the code and all dependencies into the folder *ldap-sssd-ssh-rex*.
 
-### Exploring the code
+## Exploring the code
 
 The Rexfile
 
