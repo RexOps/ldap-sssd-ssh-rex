@@ -95,6 +95,8 @@ The default installation of OpenLDAP is not able to manage SSH Keys inside it. B
 
 If you consider to put your OpenLDAP installation to production i recommend you to read http://www.openldap.org/doc/admin24/replication.html how to setup replication.
 
+This tutorial also do not cover the access control management. Please read http://www.openldap.org/doc/admin24/access-control.html for more information on this topic.
+
 In the *Rexfile* you'll find the task *setup_server*.
 
 ```perl
@@ -153,6 +155,46 @@ ldap_entry "ou=Services,dc=rexify,dc=org",
 This code creates 3 *folders* (the LDAP name for such a *folder* is *organizationalUnit*, hence the acronym *ou*). One for the user accounts *ou=People,dc=rexify,dc=org*, one for the groups *ou=Groups,dc=rexify,dc=org* and one for special service accounts *ou=Services,dc=rexify,dc=org*.
 
 You can create you own structure this is just an example.
+
+Then you need to create a service user for sssd. SSSD use this user to search the LDAP database to find the user that tries to login.
+
+```perl
+ldap_account "sssd",
+  ensure        => 'present',
+  dn            => 'ou=Services,dc=rexify,dc=org',
+  givenName     => 'SSSD',
+  sn            => 'Service User',
+  uidNumber     => '4000',
+  gidNumber     => 0,
+  loginShell    => '/bin/false',
+  homeDirectory => '/tmp',
+  userPassword  => 'abcdef';
+```
+
+Now lets create a sample group and user.
+
+```perl
+ldap_group "ldapusers",
+  ensure    => 'present',
+  dn        => 'ou=Groups,dc=rexify,dc=org',
+  gidNumber => 3000;
+
+ldap_account "sampleuser",
+  ensure        => 'present',
+  dn            => 'ou=People,dc=rexify,dc=org',
+  givenName     => 'SampleUser',
+  sn            => 'Surename',
+  uidNumber     => 5000,
+  gidNumber     => 3000,
+  homeDirectory => '/home/sampleuser',
+  loginShell    => '/bin/bash',
+  mail          => 'sample.user@gmail.com',
+  userPassword  => '{CRYPT}vPYgtKD.j9iL2',
+  sshPublicKey  => 'ssh-rsa AAAAB3NzaC1y...',
+  groups => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
+```
+
+This will create a group names *ldapusers* inside the organizational unit (ou) *ou=Groups,dc=rexify,dc=org* and a user *sampleuser* inside *ou=People,dc=rexify,dc=org*. You can create the crypted password string with the tool *slapdpasswd*.
 
 ## Setup SSSD
 

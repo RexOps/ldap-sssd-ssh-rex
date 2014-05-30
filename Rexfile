@@ -57,11 +57,6 @@ task "setup_server",
   #   objectClass => [ 'top', 'groupOfNames' ],
   #   member      => ['cn=jfried,ou=People,dc=rexify,dc=org'];
 
-  ldap_group "ldapusers",
-    ensure    => 'present',
-    dn        => 'ou=Groups,dc=rexify,dc=org',
-    gidNumber => 3000;
-
   ldap_account "nss",
     ensure        => 'present',
     dn            => 'ou=Services,dc=rexify,dc=org',
@@ -72,6 +67,11 @@ task "setup_server",
     loginShell    => '/bin/false',
     homeDirectory => '/tmp',
     userPassword  => 'abcdef';
+
+  ldap_group "ldapusers",
+    ensure    => 'present',
+    dn        => 'ou=Groups,dc=rexify,dc=org',
+    gidNumber => 3000;
 
   ldap_account "jfried",
     ensure        => 'present',
@@ -102,7 +102,6 @@ task "setup_server",
     groups        => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
 
   };
-
 
 task "setup_client",
   group => "client",
