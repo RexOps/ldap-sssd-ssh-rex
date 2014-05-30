@@ -1,5 +1,5 @@
 use Rex -base;
-use Data::Dumper;
+
 use Rex::LDAP::OpenLDAP;
 use Rex::LDAP::OpenLDAP::Commands;
 use Rex::LDAP::OpenLDAP::UserManagement::Commands;
@@ -17,22 +17,6 @@ set openldap => {
   password => 'test',
   base_dn  => 'dc=rexify,dc=org',
 };
-
-task "setup_client",
-  group => "client",
-  make {
-
-  Rex::LDAP::OpenLDAP::UserManagement::Client::setup {
-    ldap_base_dn       => 'dc=rexify,dc=org',
-    ldap_uri           => 'ldaps://10.211.55.168',
-    ldap_bind_dn       => 'cn=nss,ou=Services,dc=rexify,dc=org',
-    ldap_bind_password => 'abcdef',
-    ldap_base_user_dn  => 'ou=People,dc=rexify,dc=org',
-    ldap_base_group_dn => 'ou=Groups,dc=rexify,dc=org',
-    configure_ssh_ldap => TRUE,
-  };
-
-  };
 
 task "setup_server",
   group => "server",
@@ -116,5 +100,22 @@ task "setup_server",
     mail          => 'jan.gehring@inovex.de',
     userPassword  => '{CRYPT}vPYgtKD.j9iL2',
     groups        => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
+
+  };
+
+
+task "setup_client",
+  group => "client",
+  make {
+
+  Rex::LDAP::OpenLDAP::UserManagement::Client::setup {
+    ldap_base_dn       => 'dc=rexify,dc=org',
+    ldap_uri           => 'ldaps://10.211.55.168',
+    ldap_bind_dn       => 'cn=nss,ou=Services,dc=rexify,dc=org',
+    ldap_bind_password => 'abcdef',
+    ldap_base_user_dn  => 'ou=People,dc=rexify,dc=org',
+    ldap_base_group_dn => 'ou=Groups,dc=rexify,dc=org',
+    configure_ssh_ldap => TRUE,
+  };
 
   };
