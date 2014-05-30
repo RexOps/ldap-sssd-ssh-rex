@@ -8,8 +8,35 @@ OpenLDAP (http://www.openldap.org/) is an open source directory server widely us
 
 SSSD (https://fedorahosted.org/sssd/) is the acronym for System Security Services Daemon. With its help it is possible to to authenticate your linux users against an OpenLDAP directory server with some nifty additions like offline support.
 
+## Preparation
+
+For this tutorial i've used CentOS 6. To follow the tutorial you need one system where you can install Rex (this can also be installed on your Workstation), one system for OpenLDAP and one (or some) client systems to configure pam to authenticate against OpenLDAP.
 
 
-## Dependencies
+## Installing Rex
 
-During the time of writing the Rex LDAP Module is located here: https://bitbucket.org/jfried/rex-recipes/src/fca0623457780009695b29d3fcdb5637d5bcea9c/Rex/LDAP/OpenLDAP/?at=feature/openldap
+The installation of Rex is easy. If you're using Linux you may find packages for it on http://www.rexify.org/get/.
+
+If there is no package for your distribution available, you can also install it via CPAN. For this you have to install libssh2-devel first.
+
+```bash
+sudo sh -c "curl -L cpanmin.us | perl - Rex"
+```
+
+## Project Setup
+
+To initialize your project you can use the ```rexify``` command to download the code and all dependencies.
+
+```bash
+rexify --init=https://jfried@bitbucket.org/jfried/ldap-sssd-ssh-rex.git
+```
+
+This command will download the code and all dependencies into the folder *ldap-sssd-ssh-rex*.
+
+### Exploring the code
+
+The Rexfile
+
+The other files
+
+The CMDB
