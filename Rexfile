@@ -8,6 +8,7 @@ use Rex::LDAP::OpenLDAP::UserManagement::Server;
 
 user "root";
 password "box";
+pass_auth;
 
 group server => "10.211.55.168";
 group client => "10.211.55.168", "10.211.55.169";
