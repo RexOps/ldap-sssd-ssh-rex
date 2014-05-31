@@ -57,13 +57,13 @@ task "setup_server",
   #   objectClass => [ 'top', 'groupOfNames' ],
   #   member      => ['cn=jfried,ou=People,dc=rexify,dc=org'];
 
-  ldap_account "nss",
+  ldap_account "sssd",
     ensure        => 'present',
     dn            => 'ou=Services,dc=rexify,dc=org',
-    givenName     => 'nss',
-    sn            => 'account',
-    uidNumber     => '4000',
-    gidNumber     => 0,
+    givenName     => 'sssd',
+    sn            => 'Service Account',
+    uidNumber     => 4000,
+    gidNumber     => 1,
     loginShell    => '/bin/false',
     homeDirectory => '/tmp',
     userPassword  => 'abcdef';
@@ -78,7 +78,7 @@ task "setup_server",
     dn            => 'ou=People,dc=rexify,dc=org',
     givenName     => 'Jan',
     sn            => 'Gehring',
-    uidNumber     => '5000',
+    uidNumber     => 5000,
     gidNumber     => 3000,
     homeDirectory => '/home/jfried',
     loginShell    => '/bin/bash',
@@ -87,19 +87,6 @@ task "setup_server",
     sshPublicKey =>
     'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChUwh/HH1NGFB7M3m9DyL/hH3HoJpRu9mi52JIUI2PhZhBU/idp3qcvhur2U9IpwQfjjzgei7IN3dgTjnIB1CFG9ux4PJ56gS2NYvcHd+FsuSJecGLEkYamq2dk2+CgRC7rPGLhxCrBO29FI9O5Lfew8hiFOVIIIY2S9xXgWXQeH/bxqrsJW/WoGusZjZaWCJkYZmC7y3CvxswBkDOAXdf8tl1rbRQbTjRSiEoCQjsCFYV3unNDS7gwSf2a9nBZmBkWibr69HbofE/LScKauhasXz55bqCRdn+ELJiHTJfi4tExRwhHxl6mtD1VjfxBfts5gJgdRclOpni1nuwPPIp jan@pitahaya.local',
     groups => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
-
-  ldap_account "jgehring",
-    ensure        => 'absent',
-    dn            => 'ou=People,dc=rexify,dc=org',
-    givenName     => 'Jan',
-    sn            => 'Gehring',
-    uidNumber     => 5001,
-    gidNumber     => 3000,
-    homeDirectory => '/home/jgehring',
-    loginShell    => '/bin/bash',
-    mail          => 'jan.gehring@inovex.de',
-    userPassword  => '{CRYPT}vPYgtKD.j9iL2',
-    groups        => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
 
   };
 
@@ -110,7 +97,7 @@ task "setup_client",
   Rex::LDAP::OpenLDAP::UserManagement::Client::setup {
     ldap_base_dn       => 'dc=rexify,dc=org',
     ldap_uri           => 'ldaps://10.211.55.168',
-    ldap_bind_dn       => 'cn=nss,ou=Services,dc=rexify,dc=org',
+    ldap_bind_dn       => 'cn=sssd,ou=Services,dc=rexify,dc=org',
     ldap_bind_password => 'abcdef',
     ldap_base_user_dn  => 'ou=People,dc=rexify,dc=org',
     ldap_base_group_dn => 'ou=Groups,dc=rexify,dc=org',

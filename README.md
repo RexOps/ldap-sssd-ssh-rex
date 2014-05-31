@@ -110,8 +110,8 @@ This task is configured to run on all servers registered in the group *server*.
 ```perl
   Rex::LDAP::OpenLDAP::setup {
     ldap_admin_password         => 'admin',
-    ldap_root_dn                => 'dc=rexify,dc=org',
-    ldap_root_dn_admin_password => 'test',
+    ldap_base_dn                => 'dc=rexify,dc=org',
+    ldap_base_dn_admin_password => 'test',
     ldap_configure_tls          => TRUE,
   };
 
@@ -121,9 +121,9 @@ This task is configured to run on all servers registered in the group *server*.
 
 First it install OpenLDAP and create a root database for you. It also configures the admin password of your LDAP server.
 
-*ldap_root_dn* is the name of the database Rex should create for you. Normaly you want to add your organizations domain. Something like *dc=company,dc=tld*.
+*ldap_base_dn* is the name of the database Rex should create for you. Normaly you want to add your organizations domain. Something like *dc=company,dc=tld*.
 
-*ldap_root_db_admin_password* is the password for the admin account of your database. This will be *cn=admin,dc=rexify,dc=org*.
+*ldap_base_db_admin_password* is the password for the admin account of your database. This will be *cn=admin,dc=rexify,dc=org*.
 
 *ldap_configure_tls* can be set to *TRUE* or *FALSE*. If you set it to true, you have to add the SSL cert-, key- and ca file into the folder *files/openldap/certs*, so that Rex can upload them to the LDAP server.
 
@@ -198,9 +198,56 @@ This will create a group names *ldapusers* inside the organizational unit (ou) *
 
 ## Setup SSSD
 
+Now, after you have setup OpenLDAP it is time to setup SSSD. For this there is a task *setup_client* inside the *Rexfile*.
 
-## Exploring the code
+```perl
+task "setup_client",
+  group => "client",
+  make {
+```
 
-The Rexfile
+This task is configured to run on all servers inside the group *client*.
 
-The other files
+```perl
+Rex::LDAP::OpenLDAP::UserManagement::Client::setup {
+  ldap_base_dn       => 'dc=rexify,dc=org',
+  ldap_uri           => 'ldaps://10.211.55.168',
+  ldap_bind_dn       => 'cn=sssd,ou=Services,dc=rexify,dc=org',
+  ldap_bind_password => 'abcdef',
+  ldap_base_user_dn  => 'ou=People,dc=rexify,dc=org',
+  ldap_base_group_dn => 'ou=Groups,dc=rexify,dc=org',
+  configure_ssh_ldap => TRUE,
+};
+```
+
+*ldap_base_dn* is the root of your LDAP database.
+
+*ldap_uri* the URL to your OpenLDAP server. If you're not using SSL you can use ```ldap://servername```.
+
+*ldap_bind_dn* the service use SSSD should use to search for the user that wants to login.
+
+*ldap_bind_password* the password for the service user
+
+*ldap_base_user_dn* the root of the user directory
+
+*ldap_base_group_dn* the root of the group directory
+
+*configure_ssh_ldap* wether to configure sshd to check the public key against OpenLDAP.
+
+## Setup SSHD
+
+Since a few versions SSHd supports the execution of an external executable on connection. This is done with the ```AuthorizedKeysCommand``` option.
+If you use the *configure_ssh_ldap* option on client setup it will upload a script that queries the LADP server for the ssh key of the user that wants to login.
+
+The configuration of this script can be done in the file */etc/ssh/pubkey.yaml*. The ```Rex::LDAP::OpenLDAP::UserManagement::Client::setup``` task automatically creates the right configuration for you.
+
+```yaml
+host: 'dc=rexify,dc=org'
+bind_dn: 'cn=sssd,ou=Services,dc=rexify,dc=org'
+bind_pw: 'abcdef'
+base_dn: 'dc=rexify,dc=org'
+filter: (&(uid={{LOGIN_NAME}})(objectClass=posixAccount))
+#tls:
+#        verify: optional
+#        cafile: /etc/openldap/certs/cacert.pem
+```
