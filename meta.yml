@@ -1,0 +1,6 @@
+Name: OpenLDAP_and_SSSD
+Description: Setup OpenLDAP and SSSD for central authentication
+Author: jan gehring <jan.gehring@gmail.com>
+License: Apache 2.0
+Require:
+  - Rex::LDAP::OpenLDAP

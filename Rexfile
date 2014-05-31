@@ -24,8 +24,8 @@ task "setup_server",
 
   Rex::LDAP::OpenLDAP::setup {
     ldap_admin_password         => 'admin',
-    ldap_root_dn                => 'dc=rexify,dc=org',
-    ldap_root_dn_admin_password => 'test',
+    ldap_base_dn                => 'dc=rexify,dc=org',
+    ldap_base_dn_admin_password => 'test',
     ldap_configure_tls          => TRUE,
   };
 
