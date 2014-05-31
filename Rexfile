@@ -46,17 +46,6 @@ task "setup_server",
     objectClass => [ 'top', 'organizationalUnit' ],
     ou          => 'Services';
 
-  # ldap_entry "ou=HostGroup,dc=rexify,dc=org",
-  #   ensure      => 'present',
-  #   objectClass => [ 'top', 'organizationalUnit' ],
-  #   ou          => 'HostGroup';
-
-  # ldap_entry "cn=admin,ou=HostGroup,dc=rexify,dc=org",
-  #   ensure      => 'present',
-  #   cn          => 'admin',
-  #   objectClass => [ 'top', 'groupOfNames' ],
-  #   member      => ['cn=jfried,ou=People,dc=rexify,dc=org'];
-
   ldap_account "sssd",
     ensure        => 'present',
     dn            => 'ou=Services,dc=rexify,dc=org',
@@ -84,9 +73,8 @@ task "setup_server",
     loginShell    => '/bin/bash',
     mail          => 'jan.gehring@gmail.com',
     userPassword  => '{CRYPT}vPYgtKD.j9iL2',
-    sshPublicKey =>
-    'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChUwh/HH1NGFB7M3m9DyL/hH3HoJpRu9mi52JIUI2PhZhBU/idp3qcvhur2U9IpwQfjjzgei7IN3dgTjnIB1CFG9ux4PJ56gS2NYvcHd+FsuSJecGLEkYamq2dk2+CgRC7rPGLhxCrBO29FI9O5Lfew8hiFOVIIIY2S9xXgWXQeH/bxqrsJW/WoGusZjZaWCJkYZmC7y3CvxswBkDOAXdf8tl1rbRQbTjRSiEoCQjsCFYV3unNDS7gwSf2a9nBZmBkWibr69HbofE/LScKauhasXz55bqCRdn+ELJiHTJfi4tExRwhHxl6mtD1VjfxBfts5gJgdRclOpni1nuwPPIp jan@pitahaya.local',
-    groups => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
+    sshPublicKey  => 'ssh-rsa AAAAB3NzaC1....',
+    groups        => ['cn=ldapusers,ou=Groups,dc=rexify,dc=org'];
 
   };
 
